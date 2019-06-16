@@ -2,7 +2,7 @@
 	<div>
 		<div class="content-row">
 			<filters @filterApplied="updateEvents()"></filters>
-			<event-list :events="displayedEvents" @childTurnPage="turnPage"></event-list>
+			<event-list :events="displayedEvents" :currentPageNum="currentPageNum" :pageNums="displayedPageNums" @turnPage="turnPage"></event-list>
 		</div>
 	</div>	
 </template>
@@ -28,7 +28,7 @@
 		data() {
 			return {
                 events: [],
-                pageNum: 1,
+                currentPageNum: 1,
                 eventsPerPage: 10
 			};
 		},
@@ -49,10 +49,22 @@
         computed: {
             displayedEvents: function(){
                 let output = [];
-                for(var i = (this.pageNum * this.eventsPerPage); (i < (this.eventsPerPage * (this.pageNum + 1)) && i < this.events.length); i++){
+                for(var i = ((this.currentPageNum - 1)* this.eventsPerPage); (i < (this.eventsPerPage * this.currentPageNum) && i < this.events.length); i++){
                     output.push(this.events[i]);
                 }
                 return output;
+            },
+            displayedPageNums: function() {
+                let output = [1, 2, 3, 4, 5]
+                let sz = output.length;
+                let totalPages = Math.ceil(this.events.length / this.eventsPerPage)
+                if(this.currentPageNum < 4){
+                    return output;
+                }else if(this.currentPageNum < totalPages - 1){
+                    return output.map((num, i) => this.currentPageNum - (Math.floor(sz/2)-i));
+                }else{
+                    return output.map((num, i) => totalPages - (sz - (i + 1)));
+                }
             }
         },
 		methods: {
@@ -71,18 +83,13 @@
 				});
             },
             turnPage(direction, pageNum){
-                //  console.log(`the 'direction' parameter equals ${direction} and is a ${typeof direction}`)
-                // console.log(`the 'page' parameter equals ${page} and is a ${typeof page}`)
                 if(pageNum){
-                    console.log("going directly to page");
-                    // return this.pageNum = pageNum
+                    return this.currentPageNum = pageNum
                 }else{
-                    if(direction === "up"){
-                        console.log("paging up");
-                        this.pageNum++;
-                    }else if(direction === "down" && this.pageNum > 1){
-                        console.log("paging down");
-                        this.pageNum--;
+                    if(direction === "up" && this.currentPageNum < Math.ceil(this.events.length / this.eventsPerPage)){
+                        this.currentPageNum++;
+                    }else if(direction === "down" && this.currentPageNum > 1){
+                        this.currentPageNum--;
                     }
                 }
 

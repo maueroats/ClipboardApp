@@ -2,7 +2,7 @@
 	<div>
 		<div class="content-row">
 			<filters @filterApplied="updateEvents()"></filters>
-			<event-list :events="events"></event-list>
+			<event-list :events="displayedEvents" @childTurnPage="turnPage"></event-list>
 		</div>
 	</div>	
 </template>
@@ -27,7 +27,9 @@
 	export default {
 		data() {
 			return {
-				events: [],
+                events: [],
+                pageNum: 1,
+                eventsPerPage: 10
 			};
 		},
 		asyncData ({ app, params }) {
@@ -43,7 +45,16 @@
 				.then(res => {
 					return { events: res };
 				});
-		},
+        },
+        computed: {
+            displayedEvents: function(){
+                let output = [];
+                for(var i = (this.pageNum * this.eventsPerPage); (i < (this.eventsPerPage * (this.pageNum + 1)) && i < this.events.length); i++){
+                    output.push(this.events[i]);
+                }
+                return output;
+            }
+        },
 		methods: {
 			updateEvents: function() {
 				const eventServiceClient = getClient(this.$env.API_URL || '');
@@ -58,7 +69,24 @@
 				.then((res) => {
 					this.events = res;
 				});
-			}
+            },
+            turnPage(direction, pageNum){
+                //  console.log(`the 'direction' parameter equals ${direction} and is a ${typeof direction}`)
+                // console.log(`the 'page' parameter equals ${page} and is a ${typeof page}`)
+                if(pageNum){
+                    console.log("going directly to page");
+                    // return this.pageNum = pageNum
+                }else{
+                    if(direction === "up"){
+                        console.log("paging up");
+                        this.pageNum++;
+                    }else if(direction === "down" && this.pageNum > 1){
+                        console.log("paging down");
+                        this.pageNum--;
+                    }
+                }
+
+            }
 		},
 		components: {
 			Filters,

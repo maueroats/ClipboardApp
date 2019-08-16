@@ -21,7 +21,8 @@ class SpiderBase(AggregatorBase):
         return return_data
 
     def empty_check_extract(self, base_selector, extractor, path, default_value=''):
-        return list(map(lambda data: default_value if len(data) == 0 else data[0], [extractor(base_data)(path).extract() for base_data in base_selector]))
+        return list(map(lambda data: default_value if len(data) == 0 else data[0], 
+                        [extractor(base_data)(path).extract() for base_data in base_selector]))
 
     def create_time_data(self, **kwargs):
         count = len(list(kwargs.values())[0])

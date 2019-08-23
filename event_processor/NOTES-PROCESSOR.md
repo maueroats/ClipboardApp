@@ -101,7 +101,12 @@ NOTE: `self.verbose_scrapy_output` is set twice.
    Has some TODO notes about Unicode. I would like to see tests to
    make sure timestamps are correct based on some real site's data.
 
-* `library_events`: Chicago Public Library. WORKING HERE FIXME TODO.
+* `library_events`: Chicago Public Library. Complexity = 3.
+
+  Automatically avoids full and cancelled events. Gets events page by
+  page from the server search function. Moderate complexity. 
+  Examples of "details" would make the reasoning about time in the code
+  clearer.
 
 ## base
 

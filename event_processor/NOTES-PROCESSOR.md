@@ -166,6 +166,35 @@ Scrapy.spiders.
         value. Order keywords appear in should not matter? I think
         this function should use `*args` not `**kwargs`.
 
+## models
+
+* categories: Only LIBRARY and EDUCATION. 
+
+* event:
+
+    * Classes
+
+        * `Event`: Fields defined as functions (below) using scapy.
+        * `EventLoader`: Uses scapy's `ItemLoader`.
+        * `EventManager`: Dictionary of events, method to update event
+          if already present. Code snippet `to_dicts` is nonstandard.
+
+    * Functions.  All of the items below are the results of `scrapy.Field` calls.
+
+      * `custom_field`
+      * `price_field` DataUtils function to remove html. `$` sign.
+      * `url_field`: no trailing slash in the url.
+      * `category_field`
+      * `address_field`: includes local function for parsing
+        address. Uses sophisticated `usaddress` parsing project,
+        apparently only to add Chicago, IL to the address if that
+        information is missing! 
+      * `date_Field`: Uses complex date parsing code from this app.
+    
+
+      *  **TODO**: Would it help to remember a more sophisticated parse of the address? 
+
+
 ## scrapers
 
 * greatlakes: Obsolete.
@@ -237,5 +266,25 @@ Scrapy.spiders.
 
 * Switchable Decorator: Complexity = 1. Only used in `cache_call`.
 
+* Time Utils: Parse date and time specifications. Complexity = 4. 
+
+      * Uses regular expressions and at least 2 libraries. TODO: Really
+        could use written tests so we know what kind of specifications
+        have been seen.
+
+      * `get_timestamp(day, time)`: hours and minutes on given day.
+      * `get_timestamps`: Dictionary of time data -> pair of
+        timestamps (start, end).
+        
+      time based on what you understand:
+      * whole time? 
+      * end date? (use start date if missing)
+      * start time?
+      * time range?
+
+      If unable to parse a start time, it gives the "min timestamp for
+      day". Similarly for end time and max timestamp. (FIXME: is this
+      a good idea? What does this mean?) 
+         
 
 

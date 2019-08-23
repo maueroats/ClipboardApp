@@ -197,6 +197,42 @@ this function should use <code>*args</code> not <code>**kwargs</code>.</li>
 </ul></li>
 </ul>
 
+<h2 id="models">models</h2>
+
+<ul>
+<li><p>categories: Only LIBRARY and EDUCATION.</p></li>
+
+<li><p>event:</p>
+
+<ul>
+<li><p>Classes</p>
+
+<ul>
+<li><code>Event</code>: Fields defined as functions (below) using scapy.</li>
+<li><code>EventLoader</code>: Uses scapy's <code>ItemLoader</code>.</li>
+<li><code>EventManager</code>: Dictionary of events, method to update event
+if already present. Code snippet <code>to_dicts</code> is nonstandard.</li>
+</ul></li>
+
+<li><p>Functions.  All of the items below are the results of <code>scrapy.Field</code> calls.</p>
+
+<ul>
+<li><code>custom_field</code></li>
+<li><code>price_field</code> DataUtils function to remove html. <code>$</code> sign.</li>
+<li><code>url_field</code>: no trailing slash in the url.</li>
+<li><code>category_field</code></li>
+<li><code>address_field</code>: includes local function for parsing
+address. Uses sophisticated <code>usaddress</code> parsing project,
+apparently only to add Chicago, IL to the address if that
+information is missing!</li>
+
+<li><p><code>date_Field</code>: Uses complex date parsing code from this app.</p></li>
+
+<li><p><strong>TODO</strong>: Would it help to remember a more sophisticated parse of the address?</p></li>
+</ul></li>
+</ul></li>
+</ul>
+
 <h2 id="scrapers">scrapers</h2>
 
 <ul>
@@ -284,4 +320,30 @@ codebase.</li>
 </ul></li>
 
 <li><p>Switchable Decorator: Complexity = 1. Only used in <code>cache_call</code>.</p></li>
+
+<li><p>Time Utils: Parse date and time specifications. Complexity = 4.</p>
+
+<ul>
+<li><p>Uses regular expressions and at least 2 libraries. TODO: Really
+could use written tests so we know what kind of specifications
+have been seen.</p></li>
+
+<li><p><code>get_timestamp(day, time)</code>: hours and minutes on given day.</p></li>
+
+<li><p><code>get_timestamps</code>: Dictionary of time data -&gt; pair of
+timestamps (start, end).</p></li>
+</ul>
+
+<p>time based on what you understand:</p>
+
+<ul>
+<li>whole time?</li>
+<li>end date? (use start date if missing)</li>
+<li>start time?</li>
+<li>time range?</li>
+</ul>
+
+<p>If unable to parse a start time, it gives the &quot;min timestamp for
+  day&quot;. Similarly for end time and max timestamp. (FIXME: is this
+  a good idea? What does this mean?)</p></li>
 </ul>

@@ -39,7 +39,8 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{src: '~/plugins/datepicker.client.js'}
+		{src: '~/plugins/datepicker.client.js'},
+		{src: '~/plugins/notifications.client.js'}
 	],
 
 	/*
@@ -51,7 +52,7 @@ module.exports = {
 		// Doc: https://bootstrap-vue.js.org/docs/
 		'bootstrap-vue/nuxt',
 		['nuxt-env', {
-			keys: ['API_URL']
+			keys: ['IN2IT_API_URL']
 		}]
 	],
 	/*
